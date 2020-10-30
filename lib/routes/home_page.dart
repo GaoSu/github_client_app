@@ -24,7 +24,7 @@ class _HomeRouteState extends State<HomeRoute> {
     if (!userModel.isLogin) {
       return Center(
         child: RaisedButton(
-          child: Text("Login"),
+          child: Text("Logined"),
           onPressed: () {
             //去登陆页面
             Navigator.pushNamed(context, "/login");
@@ -35,5 +35,4 @@ class _HomeRouteState extends State<HomeRoute> {
       return Text("List");
     }
   }
-
 }

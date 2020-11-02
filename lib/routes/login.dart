@@ -31,6 +31,7 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               TextFormField(
+                autofocus: true,
                 controller: _nameController,
                 decoration: InputDecoration(
                     labelText: "User Name", prefixIcon: Icon(Icons.person)),

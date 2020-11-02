@@ -64,6 +64,7 @@ class Git {
       queryParameters: queryParameters,
       options: _options,
     );
-    return r.data.map((e) => Repo.fromJson(e));
+    print("列表返回的数据${r.data}");
+    return r.data.map((e) => Repo.fromJson(e)).toList();
   }
 }

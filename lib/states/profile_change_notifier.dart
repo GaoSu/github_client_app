@@ -20,7 +20,6 @@ class UserModel extends ProfileChangeNotifier {
   bool get isLogin => user != null;
 
   set user(User user) {
-    print("_profile.user.login${_profile.user.login}");
     if (user?.login != _profile.user?.login) {
       _profile.lastLogin = _profile.user?.login;
       _profile.user = user;

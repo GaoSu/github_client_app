@@ -1,5 +1,6 @@
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
+import 'package:github_client_app/l10n/location_intl.dart';
 import 'package:github_client_app/states/index.dart';
 import 'package:provider/provider.dart';
 import 'package:github_client_app/widgets/repo_item.dart';
@@ -16,7 +17,7 @@ class _HomeRouteState extends State<HomeRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Github"),
+        title: Text(GmLocalizations.of(context).home),
       ),
       body: _buildBody(),
       drawer: MyDrawer(),
@@ -28,7 +29,7 @@ class _HomeRouteState extends State<HomeRoute> {
     if (!userModel.isLogin) {
       return Center(
         child: RaisedButton(
-          child: Text("Logined"),
+          child: Text(GmLocalizations.of(context).login),
           onPressed: () {
             //去登陆页面
             Navigator.pushNamed(context, "/login");
@@ -120,18 +121,18 @@ class MyDrawer extends StatelessWidget {
   Widget _buildMenus() {
     return Consumer(
         builder: (BuildContext context, UserModel userModel, Widget child) {
-      // var gm = GmLocalizations.of(context);
+      var gm = GmLocalizations.of(context);
       return ListView(
         children: [
           ListTile(
             leading: Icon(Icons.color_lens),
-            title: Text("换肤"),
-            onTap: () => Navigator.pushNamed(context, "themes"),
+            title: Text(gm.theme),
+            onTap: () => Navigator.pushNamed(context, "/themes"),
           ),
           ListTile(
             leading: Icon(Icons.language),
-            title: Text("语言"),
-            onTap: () => Navigator.pushNamed(context, "themes"),
+            title: Text(gm.language),
+            onTap: () => Navigator.pushNamed(context, "/language"),
           ),
           _buildLogoutWidget(context, userModel),
         ],
@@ -140,23 +141,24 @@ class MyDrawer extends StatelessWidget {
   }
 
   Widget _buildLogoutWidget(BuildContext context, UserModel userModel) {
+   var gm = GmLocalizations.of(context);
     if (userModel.isLogin) {
       return ListTile(
         leading: Icon(Icons.power_settings_new),
-        title: Text("logout"),
+        title: Text(gm.logout),
         onTap: () {
           showDialog(
             context: context,
             builder: (ctx) {
               return AlertDialog(
-                content: Text("Logout"),
+                content: Text(gm.logout),
                 actions: [
                   FlatButton(
-                    child: Text("cancel"),
+                    child: Text(gm.cancel),
                     onPressed: () => Navigator.pop(context),
                   ),
                   FlatButton(
-                    child: Text("confirm"),
+                    child: Text(gm.yes),
                     onPressed: () {
                       userModel.user = null;
                       Navigator.pop(context);

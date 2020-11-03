@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:github_client_app/common/global.dart';
+import 'package:github_client_app/l10n/location_intl.dart';
 import 'package:github_client_app/routes/home_page.dart';
-import 'package:github_client_app/routes/login.dart';
+import 'package:github_client_app/routes/index.dart';
 import 'package:github_client_app/states/index.dart';
 import 'package:provider/provider.dart';
 
@@ -15,28 +17,51 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: ThemeModel()),
         ChangeNotifierProvider.value(value: UserModel()),
+        ChangeNotifierProvider.value(value: LocaleModel()),
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
-          // This makes the visual density adapt to the platform that you run
-          // the app on. For desktop platforms, the controls will be smaller and
-          // closer together (more dense) than on mobile platforms.
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: HomeRoute(),
-        routes: {
-          "/login": (context) => Login(),
+      child: Consumer2<ThemeModel, LocaleModel>(
+        builder: (BuildContext context, themeModel, localeModel, Widget child) {
+         return MaterialApp(
+            theme: ThemeData(
+
+              primarySwatch: themeModel.theme,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            onGenerateTitle: (context) {
+              return GmLocalizations.of(context).title;
+            },
+            locale: localeModel.getLocal(),
+            supportedLocales: [
+              const Locale('en', 'US'),
+              const Locale('zh', 'CN'),
+            ],
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GmLocalizationsDelegate(),
+            ],
+           localeResolutionCallback: (Locale _locale, Iterable<Locale> supportedLocales) {
+              if (localeModel.getLocal() != null) {
+                return localeModel.getLocal();
+              } else {
+                Locale locale;
+                if (supportedLocales.contains(_locale)) {
+                  locale = _locale;
+                } else {
+                  locale = Locale('en', 'US');
+                }
+                return locale;
+              }
+            },
+            home: HomeRoute(),
+            routes: {
+              "/login": (context) => Login(),
+              "/language": (context) => LanguageRoute(),
+              "/themes": (context) => ThemeChangeRoute(),
+            },
+          );
         },
       ),
     );

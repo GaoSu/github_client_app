@@ -59,12 +59,19 @@ class Git {
     if (refresh) {
       _options.extra.addAll({"refresh": true, "list": true});
     }
-    var r = await dio.get<List>(
+    try {
+      var r = await dio.get<List>(
       "user/repos",
       queryParameters: queryParameters,
       options: _options,
     );
     print("列表返回的数据${r.data}");
     return r.data.map((e) => Repo.fromJson(e)).toList();
+    } catch (e) {
+      print(e);
+      return [];
+    }
+
+
   }
 }

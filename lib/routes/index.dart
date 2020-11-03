@@ -3,3 +3,6 @@ export 'package:github_client_app/models/index.dart';
 export 'package:github_client_app/states/index.dart';
 export 'package:github_client_app/routes/index.dart';
 export 'package:flutter/material.dart';
+export "language.dart";
+export 'login.dart';
+export 'theme_change.dart';

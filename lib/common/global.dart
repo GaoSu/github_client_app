@@ -14,6 +14,7 @@ const _themes = <MaterialColor>[
 ];
 
 class Global {
+  //这个感觉相当于iOS userdefault、
   static SharedPreferences _prefs;
   static Profile profile = Profile();
   static NetCache netCache = NetCache();

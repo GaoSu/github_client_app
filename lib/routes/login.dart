@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github_client_app/common/funs.dart';
 import 'package:github_client_app/common/git_api.dart';
+import 'package:github_client_app/l10n/location_intl.dart';
 import 'package:github_client_app/models/index.dart';
 import 'package:github_client_app/states/index.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +20,10 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    var gm = GmLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text(gm.login),
         centerTitle: true,
       ),
       body: Padding(
@@ -34,9 +36,9 @@ class _LoginState extends State<Login> {
                 autofocus: true,
                 controller: _nameController,
                 decoration: InputDecoration(
-                    labelText: "User Name", prefixIcon: Icon(Icons.person)),
+                    labelText: gm.userName, prefixIcon: Icon(Icons.person)),
                 validator: (v) {
-                  return v.trim().length > 0 ? null : "用户名不能为空";
+                  return v.trim().length > 0 ? null : gm.userNameRequired;
                 },
                 // initialValue: "GaoSu",
               ),
@@ -44,7 +46,7 @@ class _LoginState extends State<Login> {
                 // initialValue: "LHqwer123456",
                 controller: _pwdController,
                 decoration: InputDecoration(
-                  labelText: "Password",
+                  labelText: gm.password,
                   prefixIcon: Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -59,7 +61,7 @@ class _LoginState extends State<Login> {
                 ),
                 obscureText: !pwdShow,
                 validator: (v) {
-                  return v.trim().length > 5 ? null : "密码不能少于6位";
+                  return v.trim().length > 5 ? null : gm.passwordRequired;
                 },
               ),
               SizedBox(
@@ -71,10 +73,10 @@ class _LoginState extends State<Login> {
                   minHeight: 45,
                 ),
                 child: RaisedButton(
-                  color: Colors.blue,
+                  color: Theme.of(context).primaryColor,
                   onPressed: _onLogin,
                   child: Text(
-                    "Login",
+                    gm.login,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -100,6 +102,11 @@ class _LoginState extends State<Login> {
       print("suer${user}");
       Provider.of<UserModel>(context, listen: false).user = user;
     } catch (e) {
+      if (e.response?.statusCode == 401) {
+        showToast(GmLocalizations.of(context).userNameOrPasswordWrong);
+      } else {
+        showToast(e.toString());
+      }
       print(e);
     } finally {
       Navigator.of(context).pop();
